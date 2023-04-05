@@ -11,6 +11,7 @@ using SpaceWarp.API.UI.Appbar;
 using UnityEngine;
 using KSP.Game;
 using KSP.Messages;
+using System.Reflection;
 
 namespace ShowKSP2Events;
 
@@ -128,6 +129,17 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
     private void Update()
     {
         _Update++;
+
+        //var assembly = Assembly.Load("Assembly-CSharp");
+
+        //var messageTypes = assembly.GetTypes()
+        //    .Where(t => typeof(MessageCenterMessage).IsAssignableFrom(t))
+        //    .ToList();
+
+        //foreach (var messageType in messageTypes)
+        //{
+        //    Console.WriteLine(messageType.Name);
+        //}
     }
 
     private void SubscribeToEvents()
@@ -173,6 +185,8 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
         GUILayout.BeginVertical();
         GUILayout.Label($"_OnGUI: {_OnGUI}");
         GUILayout.Label($"_Update: {_Update}");
+        GUILayout.Label($"_VesselDeltaVCalculationMessage: {_VesselDeltaVCalculationMessage}");
+        GUILayout.Label($"_VesselDeltaVCalculationMessageOabOnly: {_VesselDeltaVCalculationMessageOabOnly}");
         GUILayout.Label($"_GameStateChangedMessage: {_GameStateChangedMessage}");
         GUILayout.Label($"_GameStateEnteredMessage: {_GameStateEnteredMessage}");
         GUILayout.Label($"_GameStateLeftMessage: {_GameStateLeftMessage}");
@@ -194,7 +208,6 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
         GUILayout.Label($"_StateChangedMessage: {_StateChangedMessage}");
         GUILayout.Label($"_TrackingStationLoadedMessage: {_TrackingStationLoadedMessage}");
         GUILayout.Label($"_TrackingStationUnloadedMessage: {_TrackingStationUnloadedMessage}");
-        GUILayout.Label($"_VesselDeltaVCalculationMessage: {_VesselDeltaVCalculationMessage}");
         GUILayout.Label($"_VesselLoadedMessage: {_VesselLoadedMessage}");
         GUILayout.Label($"_CloseEngineersReportWindowMessage: {_CloseEngineersReportWindowMessage}");
         GUILayout.Label($"_StagingMessageBase: {_StagingMessageBase}");
@@ -205,6 +218,8 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
     #region MyPrivateFields
     private int _OnGUI = 0;
     private int _Update = 0;
+    private int _VesselDeltaVCalculationMessage = 0;
+    private int _VesselDeltaVCalculationMessageOabOnly = 0;
     private int _GameStateChangedMessage = 0;
     private int _GameStateEnteredMessage = 0;
     private int _GameStateLeftMessage = 0;
@@ -226,7 +241,6 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
     private int _StateChangedMessage = 0;
     private int _TrackingStationLoadedMessage = 0;
     private int _TrackingStationUnloadedMessage = 0;
-    private int _VesselDeltaVCalculationMessage = 0;
     private int _VesselLoadedMessage = 0;
     private int _CloseEngineersReportWindowMessage = 0;
     private int _StagingMessageBase = 0;
@@ -320,6 +334,11 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
     private void VesselDeltaVCalculationMessage(MessageCenterMessage obj)
     {
         _VesselDeltaVCalculationMessage++;
+
+        VesselDeltaVCalculationMessage msg = (VesselDeltaVCalculationMessage)obj;
+        if (msg.DeltaVComponent.Ship == null || !msg.DeltaVComponent.Ship.IsLaunchAssembly()) return;
+        
+        _VesselDeltaVCalculationMessageOabOnly++;
     }
     private void VesselLoadedMessage(MessageCenterMessage obj)
     {
