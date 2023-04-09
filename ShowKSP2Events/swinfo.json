@@ -4,7 +4,7 @@
   "name": "ShowKSP2Events",
   "description": "Shows KSP2 events being triggered",
   "source": "",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "version_check": "",
   "dependencies": [
     {
