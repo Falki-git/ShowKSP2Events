@@ -1,11 +1,11 @@
-# ShowKSP2Events
-Shows events triggered by Kerbal Space Program 2.
+# ShowKSP2Events - a Kerbal Space Program 2 plugin
+Shows events triggered by KSP2.
 
 This is a mod to help modders mod.
 
-<span style="color: white;">White event</span> - event that was just triggered (< 1 sec)
-<span style="color: yellow;">Yellow event</span> - event that was recently triggered (< 20 sec)
-<span style="color: yellow;">Grey message</span> - event that hasn't triggered for a while (< 60 sec)
+- **White event** - event that was just triggered (< 1 sec)
+- **Yellow event** - event that was recently triggered (< 20 sec)
+- **Grey event** - event that hasn't triggered for a while (< 60 sec)
 
 ![screenshot](https://i.imgur.com/Z3zMOcJ.png)
 
@@ -18,10 +18,13 @@ Mod folder will be placed in ..\Kerbal Space Program 2\BepInEx\plugins\
 
 - open the mod via app bar.
 - see which event is being triggered by a certain user or game action
-- to subscribe to the event use the following code in your mod:
+- to subscribe to the event use the following code:
 
 ~~~~~~~~
-GameManager.Instance.Game.Messages.Subscribe<NameOfTheEventYouWantToSubscribeTo>(new Action<MessageCenterMessage>(this.YourMethodThatWillHandleTheEvent));
+// Place somewhere inside of: public override void OnInitialized()
+
+var messages = GameManager.Instance.Game.Messages;
+messages.Subscribe<NameOfTheEventYouWantToSubscribeTo>(new Action<MessageCenterMessage>(this.YourMethodThatWillHandleTheEvent));
 
 private void YourMethodThatWillHandleTheEvent(MessageCenterMessage obj)
 {
