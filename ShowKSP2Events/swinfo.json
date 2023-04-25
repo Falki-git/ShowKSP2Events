@@ -4,7 +4,7 @@
   "name": "ShowKSP2Events",
   "description": "Shows KSP2 events being triggered",
   "source": "",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "version_check": "https://raw.githubusercontent.com/Falki-git/ShowKSP2Events/master/ShowKSP2Events/swinfo.json",
   "dependencies": [
     {
