@@ -1,5 +1,4 @@
-﻿using BepInEx.Logging;
-using SpaceWarp.API.UI;
+﻿using SpaceWarp.API.UI;
 using UnityEngine;
 
 namespace ShowKSP2Events
@@ -20,6 +19,8 @@ namespace ShowKSP2Events
         internal static Color StickyTextColor = Color.yellow;
         internal static Color JustHitTextColor = Color.white;
         internal static int SpacingAfterEntry = -12;
+
+        internal static int SettingsWidth = 300;
 
         internal static void Initialize()
         {
