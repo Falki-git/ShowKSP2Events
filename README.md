@@ -1,13 +1,13 @@
 # ShowKSP2Events - a Kerbal Space Program 2 plugin
 Shows events triggered by KSP2.
 
-This is a mod to help modders mod.
+This is a mod that helps modders mod.
 
 - **White event** - event that was just triggered (< 1 sec)
 - **Yellow event** - event that was recently triggered (< 20 sec)
-- **Grey event** - event that hasn't triggered for a while (< 60 sec)
+- **Gray event** - event that hasn't triggered for a while (< 60 sec)
 
-![screenshot](https://i.imgur.com/Z3zMOcJ.png)
+![screenshot](https://i.imgur.com/Cb1D1P7.png)
 
 ## Installation
 Extract the contents of the .zip into your KSP2 installation folder.
@@ -29,4 +29,10 @@ messages.Subscribe<NameOfTheEventYouWantToSubscribeTo>(new Action<MessageCenterM
 private void YourMethodThatWillHandleTheEvent(MessageCenterMessage obj)
 {
 	// Do stuff
-} 
+}
+~~~~~~~~
+
+## Other features
+- pin events to the top
+- customize timings of colors and purges
+- export list to a JSON file inside mod folder
