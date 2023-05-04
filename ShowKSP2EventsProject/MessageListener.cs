@@ -58,13 +58,12 @@ namespace ShowKSP2Events
             var messageInfo = Messages.Find(m => m.Type == messageReceived.GetType());
             messageInfo.Hits++;
             messageInfo.TimeOfLastHit = Time.time;
-            
+            messageInfo.DateTimeOfLastHit = DateTime.Now.ToString();
+            messageInfo.IsSticky = true;
+            messageInfo.IsStale = false;
+
             if (!messageInfo.IsPermaSticky && !messageInfo.IsSticky)
-            {
-                messageInfo.IsSticky = true;
-                messageInfo.IsStale = false;
                 MoveToBelowLastSticky(messageInfo);
-            }
         }
 
         private void MoveToBelowLastSticky(MessageInfo message)
@@ -129,6 +128,12 @@ namespace ShowKSP2Events
                 message.IsSticky = false;
                 message.IsStale = true;
             }
+        }
+
+        internal void OnExportClicked()
+        {
+            var x = new ExportMessages(Messages.FindAll(m => m.Hits > 0));
+            x.Export();
         }
     }    
 }

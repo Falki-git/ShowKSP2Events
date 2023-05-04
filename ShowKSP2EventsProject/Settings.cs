@@ -6,9 +6,9 @@ namespace ShowKSP2Events
 {
     public class Settings
     {
-        public static float StickyDuration = 20.0f;
-        public static float DurationTillPruned = 30.0f; //60.0f
         public static float JustHit = 1.0f;
+        public static float StickyDuration = 20.0f;
+        public static float DurationTillPruned = 60.0f;
 
         private static ManualLogSource _logger = Logger.CreateLogSource("ShowKSP2Events.Settings");
 
@@ -19,8 +19,6 @@ namespace ShowKSP2Events
             try
             {
                 var data = new SettingsData();
-
-                var temp = JsonConvert.SerializeObject(data);
                 File.WriteAllText(_path, JsonConvert.SerializeObject(data));
                 _logger.LogInfo("Settings saved successfully.");
             }
@@ -44,7 +42,7 @@ namespace ShowKSP2Events
             }
             catch (FileNotFoundException ex)
             {
-                _logger.LogWarning($"Error loading settings. File was not found at the expected location. Full error description:\n" + ex);
+                _logger.LogWarning($"Settings file was not found at the expected location. Mod will continue with default settings. Full description:\n" + ex);
 
             }
             catch (Exception ex)

@@ -34,7 +34,7 @@ namespace ShowKSP2Events
                     GUILayout.Height(0)
                     );
 
-        }        
+        }
 
         private void FillMessageListener(int windowID)
         {
@@ -48,12 +48,11 @@ namespace ShowKSP2Events
                 _tillPrunedTemp = Settings.DurationTillPruned;
                 _showSettings = !_showSettings;
             }
-            if (GUILayout.Button(Textures.Save, Styles.SaveButton))
-            { }
-
+            if (GUILayout.Button(Textures.Export, Styles.ExportButton))
+                _listener.OnExportClicked();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Clear"))
-                _listener.OnClearClicked();                       
+                _listener.OnClearClicked();
             GUILayout.EndHorizontal();
 
             // Draw each message

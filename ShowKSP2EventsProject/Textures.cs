@@ -11,10 +11,8 @@ namespace ShowKSP2Events
 
         internal static Texture2D PermaStickyActive;
         internal static Texture2D PermaStickyInactive;
-        internal static Texture2D Save;
-        internal static Texture2D SaveSuccess;
+        internal static Texture2D Export;
         internal static Texture2D Settings;
-        internal static Texture2D Close;
 
         internal static void Initialize(ShowKSP2Events plugin)
         {
@@ -24,10 +22,8 @@ namespace ShowKSP2Events
 
             PermaStickyActive = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/permasticky_active.png");
             PermaStickyInactive = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/permasticky_inactive.png");
-            Save = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/save-30.png");
-            SaveSuccess = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/save-success-30.png");
+            Export = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/export-30.png");
             Settings = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/settings-20.png");
-            Close = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/close-15.png");
         }
 
         private static Texture2D LoadTexture(string path)

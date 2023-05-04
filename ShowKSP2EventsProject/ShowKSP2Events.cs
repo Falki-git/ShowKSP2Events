@@ -54,7 +54,7 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
         Settings.Load();
         Styles.Initialize();
         Textures.Initialize(this);
-        _messageListener.InitializeSubscriptions();        
+        _messageListener.InitializeSubscriptions();
     }
 
     private void OnGUI()

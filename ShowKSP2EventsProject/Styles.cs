@@ -13,7 +13,7 @@ namespace ShowKSP2Events
         internal static GUIStyle MessageJustHitColor;
         internal static GUIStyle Hits;
         internal static GUIStyle PermaSticky;
-        internal static GUIStyle SaveButton;
+        internal static GUIStyle ExportButton;
         internal static GUIStyle SettingsButton;
         internal static Color NormalTextColor = Color.grey;
         internal static Color StickyTextColor = Color.yellow;
@@ -34,7 +34,7 @@ namespace ShowKSP2Events
             MessageBase = new GUIStyle(LabelBase)
             {
                 alignment = TextAnchor.MiddleLeft,
-                fixedWidth = 400                
+                fixedWidth = 400
             };
 
             MessageNormalColor = new GUIStyle(MessageBase);
@@ -63,15 +63,15 @@ namespace ShowKSP2Events
 
             SettingsButton = new GUIStyle(SpaceWarpUISkin.button)
             {
-                fixedHeight = 28,
-                fixedWidth = 28,
+                fixedHeight = 20,
+                fixedWidth = 20,
                 padding = new RectOffset(-2, -2, -2, -2)
             };
 
-            SaveButton = new GUIStyle(SpaceWarpUISkin.button)
+            ExportButton = new GUIStyle(SpaceWarpUISkin.button)
             {
-                fixedHeight = 28,
-                fixedWidth = 28,
+                fixedHeight = 20,
+                fixedWidth = 20,
                 padding = new RectOffset(-2, -2, -2, -2)
             };
         }
