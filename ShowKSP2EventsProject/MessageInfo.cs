@@ -8,7 +8,7 @@ namespace ShowKSP2Events
         internal int Hits;
         internal double TimeOfLastHit;
         internal bool IsSticky;
-        internal bool IsPermaSticky; // TODO: implement
+        internal bool IsPermaSticky;
         internal bool IsStale;
         internal bool JustHit => Time.time - TimeOfLastHit < Settings.JustHit;
     }

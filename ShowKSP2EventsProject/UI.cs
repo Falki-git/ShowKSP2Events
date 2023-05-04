@@ -15,19 +15,36 @@ namespace ShowKSP2Events
                 GUIUtility.GetControlID(FocusType.Passive),
                 _windowRect,
                 FillMessageListener,
-                "ShowKSP2Events",
+                "// ShowKSP2Events",
                 GUILayout.Height(0)
                 );
         }
 
         private void FillMessageListener(int windowID)
         {
+            GUILayout.Space(-28);
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button(Textures.Settings, Styles.SettingsButton))
+            { } // TODO settings
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Clear"))
+                _listener.OnClearClicked();
+            if (GUILayout.Button(Textures.Save, Styles.SaveButton))
+            { }
+            if (GUILayout.Button("Save settings"))
+                Settings.Save();
+            GUILayout.EndHorizontal();
+
+            // Draw each message
             foreach (var message in _listener.Messages.Where(m => m.Hits > 0 && !m.IsStale))
             {
                 GUILayout.BeginHorizontal();
+                if (GUILayout.Button(message.IsPermaSticky ? Textures.PermaStickyActive : Textures.PermaStickyInactive, Styles.PermaSticky))
+                    _listener.OnPermaStickyClicked(message.Type);
+                GUILayout.Space(5);
                 if (message.JustHit)
                     GUILayout.Label($"{message.Type.Name}: ", Styles.MessageJustHitColor);
-                else if (message.IsSticky || message.IsPermaSticky)
+                else if (message.IsSticky)
                     GUILayout.Label($"{message.Type.Name}: ", Styles.MessageStickyColor);
                 else
                     GUILayout.Label($"{message.Type.Name}: ", Styles.MessageNormalColor);

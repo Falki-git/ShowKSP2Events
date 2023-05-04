@@ -23,7 +23,7 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
     private const string ToolbarFlightButtonID = "BTN-ShowKSP2EventsFlight";
     private const string ToolbarOABButtonID = "BTN-ShowKSP2EventsOAB";
 
-    private MessageListener _messageListener = new ();
+    private MessageListener _messageListener = new();
     private UI _ui = new();
 
     public override void OnInitialized()
@@ -51,9 +51,10 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
                 GameObject.Find(ToolbarOABButtonID)?.GetComponent<UIValue_WriteBool_Toggle>()?.SetValue(isOpen);
             }
         );
-
-        _messageListener.InitializeSubscriptions();
-        Styles.InitializeStyles();
+        Settings.Load();
+        Styles.Initialize();
+        Textures.Initialize(this);
+        _messageListener.InitializeSubscriptions();        
     }
 
     private void OnGUI()
