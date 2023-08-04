@@ -13,6 +13,8 @@ namespace ShowKSP2Events
         public static Texture2D PermaStickyInactive;
         public static Texture2D Export;
         public static Texture2D Settings;
+        public static Texture2D Cross;
+        public static Texture2D Plus;
 
         public static void Initialize(ShowKSP2Events plugin)
         {
@@ -24,6 +26,8 @@ namespace ShowKSP2Events
             PermaStickyInactive = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/permasticky_inactive.png");
             Export = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/export-30.png");
             Settings = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/settings-20.png");
+            Cross = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/cross.png");
+            Plus = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/plus.png");
         }
 
         private static Texture2D LoadTexture(string path)
@@ -34,7 +38,7 @@ namespace ShowKSP2Events
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error loading texture with path: {path}. Full error: \n{ex}");
+                _logger.LogError($"Error loading texture with path: {path}. Full error:\n{ex}");
                 return new Texture2D(20, 20);
             }
         }
