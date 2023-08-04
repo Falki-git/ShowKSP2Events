@@ -3,26 +3,26 @@ using UnityEngine;
 
 namespace ShowKSP2Events
 {
-    internal static class Styles
+    public static class Styles
     {
-        internal static GUISkin SpaceWarpUISkin;
-        internal static GUIStyle LabelBase;
-        internal static GUIStyle MessageBase;
-        internal static GUIStyle MessageNormalColor;
-        internal static GUIStyle MessageStickyColor;
-        internal static GUIStyle MessageJustHitColor;
-        internal static GUIStyle Hits;
-        internal static GUIStyle PermaSticky;
-        internal static GUIStyle ExportButton;
-        internal static GUIStyle SettingsButton;
-        internal static Color NormalTextColor = Color.grey;
-        internal static Color StickyTextColor = Color.yellow;
-        internal static Color JustHitTextColor = Color.white;
-        internal static int SpacingAfterEntry = -12;
+        public static GUISkin SpaceWarpUISkin;
+        public static GUIStyle LabelBase;
+        public static GUIStyle MessageBase;
+        public static GUIStyle MessageNormalColor;
+        public static GUIStyle MessageStickyColor;
+        public static GUIStyle MessageJustHitColor;
+        public static GUIStyle Hits;
+        public static GUIStyle PermaSticky;
+        public static GUIStyle ExportButton;
+        public static GUIStyle SettingsButton;
+        public static Color NormalTextColor = Color.grey;
+        public static Color StickyTextColor = Color.yellow;
+        public static Color JustHitTextColor = Color.white;
+        public static int SpacingAfterEntry = -12;
 
-        internal static int SettingsWidth = 300;
+        public static int SettingsWidth = 300;
 
-        internal static void Initialize()
+        public static void Initialize()
         {
             SpaceWarpUISkin = Skins.ConsoleSkin;
 
