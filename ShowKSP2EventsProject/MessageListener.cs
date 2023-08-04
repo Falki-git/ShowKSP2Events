@@ -76,6 +76,9 @@ namespace ShowKSP2Events
             messageInfo.IsSticky = true;
             messageInfo.IsStale = false;
 
+            if (messageInfo.IsLogging)
+                _logger.LogInfo($"Message {messageInfo.TypeName} triggered at {messageInfo.DateTimeOfLastHit}. Hit number: {messageInfo.Hits}.");
+
             if (!messageInfo.IsPermaSticky && !messageInfo.IsSticky)
                 MoveToBelowLastSticky(messageInfo);
         }

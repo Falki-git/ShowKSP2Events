@@ -129,7 +129,7 @@ namespace ShowKSP2Events
                 GUILayout.Space(5);
                 GUILayout.Label("--");
                 GUILayout.Space(Styles.SpacingAfterEntry);
-                GUILayout.Label("Ignored events:");
+                GUILayout.Label("<b>Ignored events:</b>");
                 GUILayout.Space(5);
 
                 foreach (var message in ignoredMessages)
