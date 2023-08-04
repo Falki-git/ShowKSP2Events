@@ -4,19 +4,30 @@ namespace ShowKSP2Events
 {
     internal class UI
     {
+        private static UI _instance;
         private Rect _windowRect = new Rect(650, 140, 500, 100);
         private Rect _settingsRect;
-        private MessageListener _listener;
 
         private bool _showSettings;
         private float _justHitTemp;
         private float _stickyTemp;
         private float _tillPrunedTemp;
 
-        internal void DrawMessageListener(MessageListener listener)
-        {
-            _listener = listener;
+        internal UI()
+        { }
 
+        internal static UI Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new UI();
+                return _instance;
+            }
+        }
+
+        internal void DrawMessageListener()
+        {
             _windowRect = GUILayout.Window(
                 GUIUtility.GetControlID(FocusType.Passive),
                 _windowRect,
@@ -49,18 +60,18 @@ namespace ShowKSP2Events
                 _showSettings = !_showSettings;
             }
             if (GUILayout.Button(Textures.Export, Styles.ExportButton))
-                _listener.OnExportClicked();
+                MessageListener.Instance.OnExportClicked();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Clear"))
-                _listener.OnClearClicked();
+                MessageListener.Instance.OnClearClicked();
             GUILayout.EndHorizontal();
 
             // Draw each message
-            foreach (var message in _listener.Messages.Where(m => m.Hits > 0 && !m.IsStale))
+            foreach (var message in MessageListener.Instance.Messages.Where(m => m.Hits > 0 && !m.IsStale))
             {
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button(message.IsPermaSticky ? Textures.PermaStickyActive : Textures.PermaStickyInactive, Styles.PermaSticky))
-                    _listener.OnPermaStickyClicked(message.Type);
+                    MessageListener.Instance.OnPermaStickyClicked(message.Type);
                 GUILayout.Space(5);
                 if (message.JustHit)
                     GUILayout.Label($"{message.Type.Name}: ", Styles.MessageJustHitColor);

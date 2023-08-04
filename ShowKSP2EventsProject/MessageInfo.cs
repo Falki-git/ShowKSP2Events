@@ -3,19 +3,19 @@ using UnityEngine;
 
 namespace ShowKSP2Events
 {
-    internal class MessageInfo
+    public class MessageInfo
     {
-        internal Type Type;
+        public Type Type;
         [JsonProperty]
-        internal string TypeName => Type.Name;
+        public string TypeName => Type.Name;
         [JsonProperty]
-        internal int Hits;
-        internal double TimeOfLastHit;
+        public int Hits;
+        public double TimeOfLastHit;
         [JsonProperty]
-        internal string DateTimeOfLastHit;
-        internal bool IsSticky;
-        internal bool IsPermaSticky;
-        internal bool IsStale;
-        internal bool JustHit => Time.time - TimeOfLastHit < Settings.JustHit;
+        public string DateTimeOfLastHit;
+        public bool IsSticky;
+        public bool IsPermaSticky;
+        public bool IsStale;
+        public bool JustHit => Time.time - TimeOfLastHit < Settings.JustHit;
     }
 }

@@ -6,11 +6,25 @@ using UnityEngine;
 
 namespace ShowKSP2Events
 {
-    internal class MessageListener
-    {
-        private ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("ShowKSP2Events.MessageListener");
+    public class MessageListener
+    {        
+        private ManualLogSource _logger = BepInEx.Logging.Logger.CreateLogSource("ShowKSP2Events.MessageListener");
+        private static MessageListener _instance;
 
-        internal List<MessageInfo> Messages = new();
+        public List<MessageInfo> Messages = new();
+
+        public MessageListener ()
+        { }
+
+        public static MessageListener Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new MessageListener();
+                return _instance;
+            }
+        }
 
         internal void InitializeSubscriptions()
         {
@@ -41,11 +55,11 @@ namespace ShowKSP2Events
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError(ex);
+                    _logger.LogError(ex);
                 }
             }
 
-            Logger.LogInfo($"Subscriptions initialized. No. of subscriptions: {Messages.Count}");
+            _logger.LogInfo($"Subscriptions initialized. No. of subscriptions: {Messages.Count}");
         }
 
         private void AddSubscription(Type messageType)
@@ -80,7 +94,7 @@ namespace ShowKSP2Events
             Messages.Insert(lastPermaStickyIndex == -1 ? 0 : lastPermaStickyIndex + 1, message);
         }
 
-        internal void UnSticky(MessageInfo message)
+        public void UnSticky(MessageInfo message)
         {
             var messageInfo = Messages.Find(m => m.Type == message.Type);
             messageInfo.IsSticky = false;
@@ -111,14 +125,14 @@ namespace ShowKSP2Events
             }
         }
 
-        internal void OnPermaStickyClicked(Type messageType)
+        public void OnPermaStickyClicked(Type messageType)
         {
             var message = Messages.Find(m => m.Type == messageType);
             message.IsPermaSticky = !message.IsPermaSticky;
             MoveToBelowLastPermaSticky(message);
         }
 
-        internal void OnClearClicked()
+        public void OnClearClicked()
         {
             foreach (var message in Messages)
             {
@@ -130,7 +144,7 @@ namespace ShowKSP2Events
             }
         }
 
-        internal void OnExportClicked()
+        public void OnExportClicked()
         {
             var x = new ExportMessages(Messages.FindAll(m => m.Hits > 0));
             x.Export();
