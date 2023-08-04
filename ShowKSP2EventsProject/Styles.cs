@@ -15,6 +15,9 @@ namespace ShowKSP2Events
         public static GUIStyle PermaSticky;
         public static GUIStyle ExportButton;
         public static GUIStyle SettingsButton;
+        public static GUIStyle IgnoreButton;
+        public static GUIStyle LogButtonDisabled;
+        public static GUIStyle LogButtonEnabled;
         public static Color NormalTextColor = Color.grey;
         public static Color StickyTextColor = Color.yellow;
         public static Color JustHitTextColor = Color.white;
@@ -74,6 +77,26 @@ namespace ShowKSP2Events
                 fixedWidth = 20,
                 padding = new RectOffset(-2, -2, -2, -2)
             };
+
+            IgnoreButton = new GUIStyle(SpaceWarpUISkin.button)
+            {
+                fixedHeight = 15,
+                fixedWidth = 15,
+                padding = new RectOffset(0, 0, 0, 0)
+            };
+            IgnoreButton.normal.background = null;
+
+            LogButtonDisabled = new GUIStyle(SpaceWarpUISkin.button)
+            {
+                fixedHeight = 15,
+                fixedWidth = 20,
+                padding = new RectOffset(-2, -2, -2, -2)
+            };
+            LogButtonDisabled.normal.background = null;
+            LogButtonDisabled.normal.textColor = new Color32(80, 80, 80, 255); // Dark gray
+
+            LogButtonEnabled = new GUIStyle(LogButtonDisabled);
+            LogButtonEnabled.normal.textColor = Color.white;
         }
     }
 }

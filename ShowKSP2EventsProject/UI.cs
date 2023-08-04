@@ -67,18 +67,28 @@ namespace ShowKSP2Events
             GUILayout.EndHorizontal();
 
             // Draw each message
-            foreach (var message in MessageListener.Instance.Messages.Where(m => m.Hits > 0 && !m.IsStale))
+            foreach (var message in MessageListener.Instance.Messages.Where(m => !m.IsIgnored && m.Hits > 0 && !m.IsStale))
             {
                 GUILayout.BeginHorizontal();
+                if (GUILayout.Button(Textures.Cross, Styles.IgnoreButton))
+                    message.IsIgnored = true;
+                GUILayout.Space(5);                
+                
+                if (GUILayout.Button("LOG", message.IsLogging ? Styles.LogButtonEnabled : Styles.LogButtonDisabled))
+                    message.IsLogging = !message.IsLogging;
+                GUILayout.Space(5);
+
                 if (GUILayout.Button(message.IsPermaSticky ? Textures.PermaStickyActive : Textures.PermaStickyInactive, Styles.PermaSticky))
                     MessageListener.Instance.OnPermaStickyClicked(message.Type);
                 GUILayout.Space(5);
+
                 if (message.JustHit)
                     GUILayout.Label($"{message.Type.Name}: ", Styles.MessageJustHitColor);
                 else if (message.IsSticky)
                     GUILayout.Label($"{message.Type.Name}: ", Styles.MessageStickyColor);
                 else
                     GUILayout.Label($"{message.Type.Name}: ", Styles.MessageNormalColor);
+
                 GUILayout.FlexibleSpace();
                 GUILayout.Label(message.Hits.ToString(), Styles.Hits);
                 GUILayout.EndHorizontal();
@@ -87,6 +97,8 @@ namespace ShowKSP2Events
 
             GUI.DragWindow(new Rect(0, 0, Screen.width, Screen.height));
         }
+
+        bool _logTest = false;
 
         private void FillSettings(int windowID)
         {
@@ -107,6 +119,28 @@ namespace ShowKSP2Events
                 Settings.DurationTillPruned = _tillPrunedTemp;
                 Settings.Save();
                 _showSettings = false;
+            }
+
+            // Draw ignored messages
+            var ignoredMessages = MessageListener.Instance.Messages.Where(m => m.IsIgnored);
+
+            if (ignoredMessages.Count() > 0)
+            {
+                GUILayout.Space(5);
+                GUILayout.Label("--");
+                GUILayout.Space(Styles.SpacingAfterEntry);
+                GUILayout.Label("Ignored events:");
+                GUILayout.Space(5);
+
+                foreach (var message in ignoredMessages)
+                {
+                    GUILayout.BeginHorizontal();
+                    if (GUILayout.Button(Textures.Plus, Styles.IgnoreButton))
+                        message.IsIgnored = false;
+                    GUILayout.Label(message.TypeName, Styles.LabelBase);
+                    GUILayout.EndHorizontal();
+                    GUILayout.Space(Styles.SpacingAfterEntry);
+                }
             }
         }
     }

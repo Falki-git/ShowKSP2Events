@@ -13,6 +13,8 @@ namespace ShowKSP2Events
         public double TimeOfLastHit;
         [JsonProperty]
         public string DateTimeOfLastHit;
+        public bool IsIgnored;
+        public bool IsLogging;
         public bool IsSticky;
         public bool IsPermaSticky;
         public bool IsStale;
