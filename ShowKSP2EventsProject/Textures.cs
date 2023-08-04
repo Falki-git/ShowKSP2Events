@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace ShowKSP2Events
 {
-    internal static class Textures
+    public static class Textures
     {
         private static ShowKSP2Events _plugin;
         private static readonly ManualLogSource _logger = BepInEx.Logging.Logger.CreateLogSource("ShowKSP2Events.Textures");
 
-        internal static Texture2D PermaStickyActive;
-        internal static Texture2D PermaStickyInactive;
-        internal static Texture2D Export;
-        internal static Texture2D Settings;
+        public static Texture2D PermaStickyActive;
+        public static Texture2D PermaStickyInactive;
+        public static Texture2D Export;
+        public static Texture2D Settings;
 
-        internal static void Initialize(ShowKSP2Events plugin)
+        public static void Initialize(ShowKSP2Events plugin)
         {
             // Icons from https://icons8.com
 
