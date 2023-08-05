@@ -1,6 +1,4 @@
-﻿using BepInEx.Logging;
-using MoonSharp.VsCodeDebugger.SDK;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ShowKSP2Events
 {
@@ -71,13 +69,13 @@ namespace ShowKSP2Events
             if (GUILayout.Button("LogAll", Styles.LogAllButton))
             {
                 MessageListener.Instance.OnWriteAllToLogClicked();
-                PrintStatusBarMessage("All messages types written to log.");
+                PrintStatusBarMessage("All message types written to log.");
             }
 
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Clear"))
             {
-                MessageListener.Instance.OnClearClicked();                
+                MessageListener.Instance.OnClearClicked();
                 PrintStatusBarMessage("Cleared all messages.");
             }
             GUILayout.EndHorizontal();
@@ -89,22 +87,11 @@ namespace ShowKSP2Events
                 {
                     GUILayout.BeginHorizontal();
                     if (GUILayout.Button(Textures.Cross, Styles.IgnoreButton))
-                    {
-                        //message.IsIgnored = true;
-                        //_logger.LogInfo($"Message {message.TypeName} ignored.");
-                        //Settings.Save();
-
                         MessageListener.Instance.OnIgnoredClicked(message);
-                    }
                     GUILayout.Space(5);
 
                     if (GUILayout.Button("LOG", message.IsLogging ? Styles.LogButtonEnabledButton : Styles.LogButtonDisabledButton))
-                    {
-                        //message.IsLogging = !message.IsLogging;
-                        //_logger.LogInfo($"Toggled logging for {message.TypeName}.");
-                        //Settings.Save();
-                        MessageListener.Instance.OnLoggingClicked(message);                    
-                    }
+                        MessageListener.Instance.OnLoggingClicked(message);
                     GUILayout.Space(5);
 
                     if (GUILayout.Button(message.IsPermaSticky ? Textures.PermaStickyActive : Textures.PermaStickyInactive, Styles.PermaSticky))

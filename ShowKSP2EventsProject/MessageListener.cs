@@ -182,5 +182,5 @@ namespace ShowKSP2Events
             _logger.LogInfo($"Message {message.TypeName} returned to active messages.");
             Settings.Save();
         }
-    }    
+    }
 }
