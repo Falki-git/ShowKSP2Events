@@ -1,4 +1,5 @@
 ﻿using BepInEx.Logging;
+using MoonSharp.VsCodeDebugger.SDK;
 using UnityEngine;
 
 namespace ShowKSP2Events
@@ -9,6 +10,8 @@ namespace ShowKSP2Events
         private static ManualLogSource _logger = BepInEx.Logging.Logger.CreateLogSource("ShowKSP2Events.UI");
         private Rect _windowRect = new Rect(650, 140, 500, 100);
         private Rect _settingsRect;
+        private string _statusBarMessage;
+        private float _statusBarMessageTime;
 
         private bool _showSettings;
         private float _justHitTemp;
@@ -62,12 +65,16 @@ namespace ShowKSP2Events
                 _showSettings = !_showSettings;
             }
             if (GUILayout.Button(Textures.Export, Styles.ExportButton))
+            {
                 MessageListener.Instance.OnExportClicked();
+                PrintStatusBarMessage("Exported all messages to plugin folder.");
+            }
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Clear"))
             {
                 MessageListener.Instance.OnClearClicked();
                 _logger.LogInfo($"Cleared all messages.");
+                PrintStatusBarMessage("Cleared all messages.");
             }
             GUILayout.EndHorizontal();
 
@@ -116,6 +123,16 @@ namespace ShowKSP2Events
                 // or we're shuffling the list of messages
             }
 
+            // Draw status bar message
+            if (Time.time - _statusBarMessageTime < 2)
+            {
+                GUILayout.BeginVertical();
+                GUILayout.Label("--");
+                GUILayout.Space(Styles.SpacingAfterEntry);
+                GUILayout.Label(_statusBarMessage, Styles.MessageLabel);
+                GUILayout.EndVertical();
+            }
+
             GUI.DragWindow(new Rect(0, 0, Screen.width, Screen.height));
         }
 
@@ -140,6 +157,7 @@ namespace ShowKSP2Events
                 Settings.DurationTillPruned = _tillPrunedTemp;
                 Settings.Save();
                 _showSettings = false;
+                PrintStatusBarMessage("Settings saved.");
             }
 
             // Draw ignored messages
@@ -167,6 +185,12 @@ namespace ShowKSP2Events
                     GUILayout.Space(Styles.SpacingAfterEntry);
                 }
             }
+        }
+
+        private void PrintStatusBarMessage(string text)
+        {
+            _statusBarMessage = text;
+            _statusBarMessageTime = Time.time;
         }
     }
 }

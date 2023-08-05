@@ -18,6 +18,7 @@ namespace ShowKSP2Events
         public static GUIStyle IgnoreButton;
         public static GUIStyle LogButtonDisabled;
         public static GUIStyle LogButtonEnabled;
+        public static GUIStyle MessageLabel;
         public static Color NormalTextColor = Color.grey;
         public static Color StickyTextColor = Color.yellow;
         public static Color JustHitTextColor = Color.white;
@@ -97,6 +98,9 @@ namespace ShowKSP2Events
 
             LogButtonEnabled = new GUIStyle(LogButtonDisabled);
             LogButtonEnabled.normal.textColor = Color.white;
+
+            MessageLabel = new GUIStyle(SpaceWarpUISkin.label);
+            MessageLabel.normal.textColor = Color.green;
         }
     }
 }
