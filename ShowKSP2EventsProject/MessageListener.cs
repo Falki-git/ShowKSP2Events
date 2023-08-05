@@ -143,7 +143,6 @@ namespace ShowKSP2Events
             {
                 message.Hits = 0;
                 message.TimeOfLastHit = 0;
-                message.IsPermaSticky = false;
                 message.IsSticky = false;
                 message.IsStale = true;
             }
