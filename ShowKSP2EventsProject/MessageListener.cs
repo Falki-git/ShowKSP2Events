@@ -90,7 +90,7 @@ namespace ShowKSP2Events
             Messages.Insert(lastStickyIndex == -1 ? 0 : lastStickyIndex + 1, message);
         }
 
-        private void MoveToBelowLastPermaSticky(MessageInfo message)
+        internal void MoveToBelowLastPermaSticky(MessageInfo message)
         {
             Messages.Remove(message);
             int lastPermaStickyIndex = Messages.FindLastIndex(m => m.IsPermaSticky);
@@ -132,7 +132,9 @@ namespace ShowKSP2Events
         {
             var message = Messages.Find(m => m.Type == messageType);
             message.IsPermaSticky = !message.IsPermaSticky;
-            MoveToBelowLastPermaSticky(message);
+            MoveToBelowLastPermaSticky(message);            
+            Settings.Save();
+            _logger.LogInfo($"Toggled pinning for {message.TypeName}.");
         }
 
         public void OnClearClicked()

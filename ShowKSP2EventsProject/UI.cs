@@ -89,14 +89,12 @@ namespace ShowKSP2Events
                     {
                         message.IsLogging = !message.IsLogging;
                         _logger.LogInfo($"Toggled logging for {message.TypeName}.");
+                        Settings.Save();
                     }
                     GUILayout.Space(5);
 
                     if (GUILayout.Button(message.IsPermaSticky ? Textures.PermaStickyActive : Textures.PermaStickyInactive, Styles.PermaSticky))
-                    {
                         MessageListener.Instance.OnPermaStickyClicked(message.Type);
-                        _logger.LogInfo($"Toggled pinning for {message.TypeName}.");
-                    }
                     GUILayout.Space(5);
 
                     if (message.JustHit)

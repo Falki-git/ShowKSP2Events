@@ -38,13 +38,23 @@ namespace ShowKSP2Events
                 Settings.DurationTillPruned = data.DurationTillPruned;
                 Settings.JustHit = data.JustHit;
 
-                if (data.IgnoredMessages.Count() > 0)
+                // Load data for messages that have been modified (ignored, logging or stickied)
+                if (data.SavedMessages.Count() > 0)
                 {
-                    var ignoredMessages = MessageListener.Instance.Messages
-                        .FindAll(m => data.IgnoredMessages.Contains(m.TypeName));
+                    var savedMessages = MessageListener.Instance.Messages
+                        .FindAll(m => data.SavedMessages.Select(s => s.TypeName).Contains(m.TypeName));
 
-                    foreach (var message in ignoredMessages)
-                        message.IsIgnored = true;
+                    foreach (var message in savedMessages)
+                    {
+                        var savedData = data.SavedMessages.Find(s => s.TypeName == message.TypeName);
+                        message.IsIgnored = savedData.IsIgnored;
+                        message.IsLogging = savedData.IsLogging;
+                        if(savedData.IsPermaSticky)
+                        {
+                            message.IsPermaSticky = true;
+                            MessageListener.Instance.MoveToBelowLastPermaSticky(message);
+                        }
+                    }
                 }
 
                 _logger.LogInfo("Settings loaded successfully.");
@@ -71,16 +81,41 @@ namespace ShowKSP2Events
         [JsonProperty]
         internal float JustHit;
         [JsonProperty]
-        internal List<string> IgnoredMessages;
+        internal List<SettingsMessageData> SavedMessages;
 
         internal SettingsData()
         {
             StickyDuration = Settings.StickyDuration;
             DurationTillPruned = Settings.DurationTillPruned;
             JustHit = Settings.JustHit;
-            IgnoredMessages = MessageListener.Instance.Messages
-                .Where(m => m.IsIgnored)
-                .Select(m => m.TypeName).ToList();
+
+            var savedMessages = MessageListener.Instance.Messages
+                .Where(m => m.IsIgnored || m.IsLogging || m.IsPermaSticky);
+
+            if (savedMessages.Count() > 0)
+            {
+                SavedMessages = new();
+
+                foreach (var m in savedMessages)
+                    SavedMessages.Add(new() {
+                        TypeName = m.TypeName,
+                        IsIgnored = m.IsIgnored,
+                        IsLogging = m.IsLogging,
+                        IsPermaSticky = m.IsPermaSticky
+                    });
+            }
         }
+    }
+
+    internal class SettingsMessageData
+    {
+        [JsonProperty]
+        internal string TypeName;
+        [JsonProperty]
+        internal bool IsIgnored;
+        [JsonProperty]
+        internal bool IsLogging;
+        [JsonProperty]
+        internal bool IsPermaSticky;
     }
 }
