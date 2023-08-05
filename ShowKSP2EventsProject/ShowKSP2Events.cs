@@ -23,9 +23,6 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
     private const string ToolbarFlightButtonID = "BTN-ShowKSP2EventsFlight";
     private const string ToolbarOABButtonID = "BTN-ShowKSP2EventsOAB";
 
-    private MessageListener _messageListener = new();
-    private UI _ui = new();
-
     public override void OnInitialized()
     {
         base.OnInitialized();
@@ -51,10 +48,11 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
                 GameObject.Find(ToolbarOABButtonID)?.GetComponent<UIValue_WriteBool_Toggle>()?.SetValue(isOpen);
             }
         );
-        Settings.Load();
+        
         Styles.Initialize();
         Textures.Initialize(this);
-        _messageListener.InitializeSubscriptions();
+        MessageListener.Instance.InitializeSubscriptions();
+        Settings.Load();
     }
 
     private void OnGUI()
@@ -62,19 +60,20 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
         GUI.skin = Skins.ConsoleSkin;
 
         if (_isWindowOpen)
-            _ui.DrawMessageListener(_messageListener);
+            UI.Instance.DrawMessageListener();
     }
 
     private void Update()
     {
         try
         {
-            _messageListener.CheckStickies();
-            _messageListener.CheckStales();
+            MessageListener.Instance.CheckStickies();
+            MessageListener.Instance.CheckStales();
         }
         catch (InvalidOperationException ex) when (ex.Message.Contains("Collection was modified"))
         {
             // Sometimes update will fail because an event is in the process of modifying the MessageListener.Messages list
+            // or we're shuffling the list of messages
         }
         catch (Exception ex)
         {

@@ -6,11 +6,25 @@ using UnityEngine;
 
 namespace ShowKSP2Events
 {
-    internal class MessageListener
-    {
-        private ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("ShowKSP2Events.MessageListener");
+    public class MessageListener
+    {        
+        private ManualLogSource _logger = BepInEx.Logging.Logger.CreateLogSource("ShowKSP2Events.MessageListener");
+        private static MessageListener _instance;
 
-        internal List<MessageInfo> Messages = new();
+        public List<MessageInfo> Messages = new();
+
+        public MessageListener ()
+        { }
+
+        public static MessageListener Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new MessageListener();
+                return _instance;
+            }
+        }
 
         internal void InitializeSubscriptions()
         {
@@ -41,11 +55,11 @@ namespace ShowKSP2Events
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError(ex);
+                    _logger.LogError(ex);
                 }
             }
 
-            Logger.LogInfo($"Subscriptions initialized. No. of subscriptions: {Messages.Count}");
+            _logger.LogInfo($"Subscriptions initialized. No. of subscriptions: {Messages.Count}");
         }
 
         private void AddSubscription(Type messageType)
@@ -62,6 +76,9 @@ namespace ShowKSP2Events
             messageInfo.IsSticky = true;
             messageInfo.IsStale = false;
 
+            if (messageInfo.IsLogging)
+                _logger.LogInfo($"Message {messageInfo.TypeName} triggered at {messageInfo.DateTimeOfLastHit}. Hit number: {messageInfo.Hits}.");
+
             if (!messageInfo.IsPermaSticky && !messageInfo.IsSticky)
                 MoveToBelowLastSticky(messageInfo);
         }
@@ -73,14 +90,14 @@ namespace ShowKSP2Events
             Messages.Insert(lastStickyIndex == -1 ? 0 : lastStickyIndex + 1, message);
         }
 
-        private void MoveToBelowLastPermaSticky(MessageInfo message)
+        internal void MoveToBelowLastPermaSticky(MessageInfo message)
         {
             Messages.Remove(message);
             int lastPermaStickyIndex = Messages.FindLastIndex(m => m.IsPermaSticky);
             Messages.Insert(lastPermaStickyIndex == -1 ? 0 : lastPermaStickyIndex + 1, message);
         }
 
-        internal void UnSticky(MessageInfo message)
+        public void UnSticky(MessageInfo message)
         {
             var messageInfo = Messages.Find(m => m.Type == message.Type);
             messageInfo.IsSticky = false;
@@ -111,29 +128,59 @@ namespace ShowKSP2Events
             }
         }
 
-        internal void OnPermaStickyClicked(Type messageType)
+        public void OnExportClicked()
         {
-            var message = Messages.Find(m => m.Type == messageType);
-            message.IsPermaSticky = !message.IsPermaSticky;
-            MoveToBelowLastPermaSticky(message);
+            var x = new ExportMessages(Messages.FindAll(m => m.Hits > 0));
+            x.Export();
         }
 
-        internal void OnClearClicked()
+        public void OnWriteAllToLogClicked()
+        {
+            var x = new ExportMessages(Messages);
+            x.WriteAllToLog();
+        }
+
+        public void OnClearClicked()
         {
             foreach (var message in Messages)
             {
                 message.Hits = 0;
                 message.TimeOfLastHit = 0;
-                message.IsPermaSticky = false;
                 message.IsSticky = false;
                 message.IsStale = true;
             }
+
+            _logger.LogInfo($"Cleared all messages.");
         }
 
-        internal void OnExportClicked()
+        public void OnPermaStickyClicked(Type messageType)
         {
-            var x = new ExportMessages(Messages.FindAll(m => m.Hits > 0));
-            x.Export();
+            var message = Messages.Find(m => m.Type == messageType);
+            message.IsPermaSticky = !message.IsPermaSticky;
+            MoveToBelowLastPermaSticky(message);
+            Settings.Save();
+            _logger.LogInfo($"Toggled pinning for {message.TypeName}.");
         }
-    }    
+
+        public void OnIgnoredClicked(MessageInfo message)
+        {
+            message.IsIgnored = true;
+            _logger.LogInfo($"Message {message.TypeName} ignored.");
+            Settings.Save();
+        }
+
+        public void OnLoggingClicked(MessageInfo message)
+        {
+            message.IsLogging = !message.IsLogging;
+            _logger.LogInfo($"Toggled logging for {message.TypeName}.");
+            Settings.Save();
+        }
+
+        public void OnUnignoreMessageClicked(MessageInfo message)
+        {
+            message.IsIgnored = false;
+            _logger.LogInfo($"Message {message.TypeName} returned to active messages.");
+            Settings.Save();
+        }
+    }
 }

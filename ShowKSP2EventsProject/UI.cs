@@ -4,24 +4,37 @@ namespace ShowKSP2Events
 {
     internal class UI
     {
+        private static UI _instance;
         private Rect _windowRect = new Rect(650, 140, 500, 100);
         private Rect _settingsRect;
-        private MessageListener _listener;
+        private string _statusBarMessage;
+        private float _statusBarMessageTime;
 
         private bool _showSettings;
         private float _justHitTemp;
         private float _stickyTemp;
         private float _tillPrunedTemp;
 
-        internal void DrawMessageListener(MessageListener listener)
-        {
-            _listener = listener;
+        internal UI()
+        { }
 
+        internal static UI Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new UI();
+                return _instance;
+            }
+        }
+
+        internal void DrawMessageListener()
+        {
             _windowRect = GUILayout.Window(
                 GUIUtility.GetControlID(FocusType.Passive),
                 _windowRect,
                 FillMessageListener,
-                "// ShowKSP2Events",
+                "  // ShowKSP2Events",
                 GUILayout.Height(0)
                 );
 
@@ -49,29 +62,69 @@ namespace ShowKSP2Events
                 _showSettings = !_showSettings;
             }
             if (GUILayout.Button(Textures.Export, Styles.ExportButton))
-                _listener.OnExportClicked();
+            {
+                MessageListener.Instance.OnExportClicked();
+                PrintStatusBarMessage("Exported all messages to plugin folder.");
+            }
+            if (GUILayout.Button("LogAll", Styles.LogAllButton))
+            {
+                MessageListener.Instance.OnWriteAllToLogClicked();
+                PrintStatusBarMessage("All message types written to log.");
+            }
+
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Clear"))
-                _listener.OnClearClicked();
+            {
+                MessageListener.Instance.OnClearClicked();
+                PrintStatusBarMessage("Cleared all messages.");
+            }
             GUILayout.EndHorizontal();
 
-            // Draw each message
-            foreach (var message in _listener.Messages.Where(m => m.Hits > 0 && !m.IsStale))
+            try
             {
-                GUILayout.BeginHorizontal();
-                if (GUILayout.Button(message.IsPermaSticky ? Textures.PermaStickyActive : Textures.PermaStickyInactive, Styles.PermaSticky))
-                    _listener.OnPermaStickyClicked(message.Type);
-                GUILayout.Space(5);
-                if (message.JustHit)
-                    GUILayout.Label($"{message.Type.Name}: ", Styles.MessageJustHitColor);
-                else if (message.IsSticky)
-                    GUILayout.Label($"{message.Type.Name}: ", Styles.MessageStickyColor);
-                else
-                    GUILayout.Label($"{message.Type.Name}: ", Styles.MessageNormalColor);
-                GUILayout.FlexibleSpace();
-                GUILayout.Label(message.Hits.ToString(), Styles.Hits);
-                GUILayout.EndHorizontal();
+                // Draw each message
+                foreach (var message in MessageListener.Instance.Messages.Where(m => !m.IsIgnored && m.Hits > 0 && !m.IsStale))
+                {
+                    GUILayout.BeginHorizontal();
+                    if (GUILayout.Button(Textures.Cross, Styles.IgnoreButton))
+                        MessageListener.Instance.OnIgnoredClicked(message);
+                    GUILayout.Space(5);
+
+                    if (GUILayout.Button("LOG", message.IsLogging ? Styles.LogButtonEnabledButton : Styles.LogButtonDisabledButton))
+                        MessageListener.Instance.OnLoggingClicked(message);
+                    GUILayout.Space(5);
+
+                    if (GUILayout.Button(message.IsPermaSticky ? Textures.PermaStickyActive : Textures.PermaStickyInactive, Styles.PermaSticky))
+                        MessageListener.Instance.OnPermaStickyClicked(message.Type);
+                    GUILayout.Space(5);
+
+                    if (message.JustHit)
+                        GUILayout.Label($"{message.Type.Name}: ", Styles.MessageJustHitColor);
+                    else if (message.IsSticky)
+                        GUILayout.Label($"{message.Type.Name}: ", Styles.MessageStickyColor);
+                    else
+                        GUILayout.Label($"{message.Type.Name}: ", Styles.MessageNormalColor);
+
+                    GUILayout.FlexibleSpace();
+                    GUILayout.Label(message.Hits.ToString(), Styles.Hits);
+                    GUILayout.EndHorizontal();
+                    GUILayout.Space(Styles.SpacingAfterEntry);
+                }
+            }
+            catch (InvalidOperationException ex) when (ex.Message.Contains("Collection was modified"))
+            {
+                // Sometimes drawing will fail because an event is in the process of modifying the MessageListener.Messages list
+                // or we're shuffling the list of messages
+            }
+
+            // Draw status bar message
+            if (Time.time - _statusBarMessageTime < 2)
+            {
+                GUILayout.BeginVertical();
+                GUILayout.Label("--");
                 GUILayout.Space(Styles.SpacingAfterEntry);
+                GUILayout.Label(_statusBarMessage, Styles.MessageLabel);
+                GUILayout.EndVertical();
             }
 
             GUI.DragWindow(new Rect(0, 0, Screen.width, Screen.height));
@@ -96,7 +149,36 @@ namespace ShowKSP2Events
                 Settings.DurationTillPruned = _tillPrunedTemp;
                 Settings.Save();
                 _showSettings = false;
+                PrintStatusBarMessage("Settings saved.");
             }
+
+            // Draw ignored messages
+            var ignoredMessages = MessageListener.Instance.Messages.Where(m => m.IsIgnored);
+
+            if (ignoredMessages.Count() > 0)
+            {
+                GUILayout.Space(5);
+                GUILayout.Label("--");
+                GUILayout.Space(Styles.SpacingAfterEntry);
+                GUILayout.Label("<b>Ignored events:</b>");
+                GUILayout.Space(5);
+
+                foreach (var message in ignoredMessages)
+                {
+                    GUILayout.BeginHorizontal();
+                    if (GUILayout.Button(Textures.Plus, Styles.IgnoreButton))
+                        MessageListener.Instance.OnUnignoreMessageClicked(message);
+                    GUILayout.Label(message.TypeName, Styles.LabelBase);
+                    GUILayout.EndHorizontal();
+                    GUILayout.Space(Styles.SpacingAfterEntry);
+                }
+            }
+        }
+
+        private void PrintStatusBarMessage(string text)
+        {
+            _statusBarMessage = text;
+            _statusBarMessageTime = Time.time;
         }
     }
 }

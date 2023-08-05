@@ -3,26 +3,31 @@ using UnityEngine;
 
 namespace ShowKSP2Events
 {
-    internal static class Styles
+    public static class Styles
     {
-        internal static GUISkin SpaceWarpUISkin;
-        internal static GUIStyle LabelBase;
-        internal static GUIStyle MessageBase;
-        internal static GUIStyle MessageNormalColor;
-        internal static GUIStyle MessageStickyColor;
-        internal static GUIStyle MessageJustHitColor;
-        internal static GUIStyle Hits;
-        internal static GUIStyle PermaSticky;
-        internal static GUIStyle ExportButton;
-        internal static GUIStyle SettingsButton;
-        internal static Color NormalTextColor = Color.grey;
-        internal static Color StickyTextColor = Color.yellow;
-        internal static Color JustHitTextColor = Color.white;
-        internal static int SpacingAfterEntry = -12;
+        public static GUISkin SpaceWarpUISkin;
+        public static GUIStyle LabelBase;
+        public static GUIStyle MessageBase;
+        public static GUIStyle MessageNormalColor;
+        public static GUIStyle MessageStickyColor;
+        public static GUIStyle MessageJustHitColor;
+        public static GUIStyle Hits;
+        public static GUIStyle PermaSticky;
+        public static GUIStyle ExportButton;
+        public static GUIStyle SettingsButton;
+        public static GUIStyle IgnoreButton;
+        public static GUIStyle LogButtonDisabledButton;
+        public static GUIStyle LogButtonEnabledButton;
+        public static GUIStyle LogAllButton;
+        public static GUIStyle MessageLabel;
+        public static Color NormalTextColor = Color.grey;
+        public static Color StickyTextColor = Color.yellow;
+        public static Color JustHitTextColor = Color.white;
+        public static int SpacingAfterEntry = -12;
 
-        internal static int SettingsWidth = 300;
+        public static int SettingsWidth = 300;
 
-        internal static void Initialize()
+        public static void Initialize()
         {
             SpaceWarpUISkin = Skins.ConsoleSkin;
 
@@ -74,6 +79,37 @@ namespace ShowKSP2Events
                 fixedWidth = 20,
                 padding = new RectOffset(-2, -2, -2, -2)
             };
+
+            IgnoreButton = new GUIStyle(SpaceWarpUISkin.button)
+            {
+                fixedHeight = 15,
+                fixedWidth = 15,
+                padding = new RectOffset(0, 0, 0, 0)
+            };
+            IgnoreButton.normal.background = null;
+
+            LogButtonDisabledButton = new GUIStyle(SpaceWarpUISkin.button)
+            {
+                fixedHeight = 15,
+                fixedWidth = 20,
+                padding = new RectOffset(-2, -2, -2, -2)
+            };
+            LogButtonDisabledButton.normal.background = null;
+            LogButtonDisabledButton.normal.textColor = new Color32(80, 80, 80, 255); // Dark gray
+
+            LogButtonEnabledButton = new GUIStyle(LogButtonDisabledButton);
+            LogButtonEnabledButton.normal.textColor = Color.white;
+
+            LogAllButton = new GUIStyle(SpaceWarpUISkin.button)
+            {
+                fixedHeight = 20,
+                fixedWidth = 50,
+                padding = new RectOffset(-2, -2, -2, -2)
+            };
+            LogAllButton.normal.background = null;
+
+            MessageLabel = new GUIStyle(SpaceWarpUISkin.label);
+            MessageLabel.normal.textColor = Color.green;
         }
     }
 }

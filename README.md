@@ -7,7 +7,7 @@ This is a mod that helps modders mod.
 - **Yellow event** - event that was recently triggered (< 20 sec)
 - **Gray event** - event that hasn't triggered for a while (< 60 sec)
 
-![screenshot](https://i.imgur.com/Cb1D1P7.png)
+![screenshot](https://i.imgur.com/oCfA2zs.png)
 
 ## Installation
 Extract the contents of the .zip into your KSP2 installation folder.
@@ -34,5 +34,8 @@ private void YourMethodThatWillHandleTheEvent(MessageCenterMessage obj)
 
 ## Other features
 - pin events to the top
+- ignore events you're not interested in
+- log each triggering of an event to the KSP log
+- get a list of all events that KSP2 can trigger
 - customize timings of colors and purges
 - export list to a JSON file inside mod folder
