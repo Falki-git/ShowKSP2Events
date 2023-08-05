@@ -71,8 +71,11 @@ namespace ShowKSP2Events
             {
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button(Textures.Cross, Styles.IgnoreButton))
+                {
                     message.IsIgnored = true;
-                GUILayout.Space(5);                
+                    Settings.Save();
+                }
+                GUILayout.Space(5);
                 
                 if (GUILayout.Button("LOG", message.IsLogging ? Styles.LogButtonEnabled : Styles.LogButtonDisabled))
                     message.IsLogging = !message.IsLogging;
@@ -136,7 +139,10 @@ namespace ShowKSP2Events
                 {
                     GUILayout.BeginHorizontal();
                     if (GUILayout.Button(Textures.Plus, Styles.IgnoreButton))
+                    {
                         message.IsIgnored = false;
+                        Settings.Save();
+                    }
                     GUILayout.Label(message.TypeName, Styles.LabelBase);
                     GUILayout.EndHorizontal();
                     GUILayout.Space(Styles.SpacingAfterEntry);

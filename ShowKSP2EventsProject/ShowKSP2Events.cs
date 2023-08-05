@@ -48,10 +48,11 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
                 GameObject.Find(ToolbarOABButtonID)?.GetComponent<UIValue_WriteBool_Toggle>()?.SetValue(isOpen);
             }
         );
-        Settings.Load();
+        
         Styles.Initialize();
         Textures.Initialize(this);
         MessageListener.Instance.InitializeSubscriptions();
+        Settings.Load();
     }
 
     private void OnGUI()

@@ -38,6 +38,15 @@ namespace ShowKSP2Events
                 Settings.DurationTillPruned = data.DurationTillPruned;
                 Settings.JustHit = data.JustHit;
 
+                if (data.IgnoredMessages.Count() > 0)
+                {
+                    var ignoredMessages = MessageListener.Instance.Messages
+                        .FindAll(m => data.IgnoredMessages.Contains(m.TypeName));
+
+                    foreach (var message in ignoredMessages)
+                        message.IsIgnored = true;
+                }
+
                 _logger.LogInfo("Settings loaded successfully.");
             }
             catch (FileNotFoundException ex)
@@ -61,12 +70,17 @@ namespace ShowKSP2Events
         internal float DurationTillPruned;
         [JsonProperty]
         internal float JustHit;
+        [JsonProperty]
+        internal List<string> IgnoredMessages;
 
         internal SettingsData()
         {
             StickyDuration = Settings.StickyDuration;
             DurationTillPruned = Settings.DurationTillPruned;
             JustHit = Settings.JustHit;
+            IgnoredMessages = MessageListener.Instance.Messages
+                .Where(m => m.IsIgnored)
+                .Select(m => m.TypeName).ToList();
         }
     }
 }

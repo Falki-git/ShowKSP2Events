@@ -19,6 +19,7 @@ namespace ShowKSP2Events
         public static void Initialize(ShowKSP2Events plugin)
         {
             // Icons from https://icons8.com
+            // Cross/Plus icons from K2D2 mod
 
             _plugin = plugin;
 
