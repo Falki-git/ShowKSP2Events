@@ -126,7 +126,19 @@ namespace ShowKSP2Events
                     message.IsStale = true;
                 }
             }
-        }        
+        }
+
+        public void OnExportClicked()
+        {
+            var x = new ExportMessages(Messages.FindAll(m => m.Hits > 0));
+            x.Export();
+        }
+
+        public void OnWriteAllToLogClicked()
+        {
+            var x = new ExportMessages(Messages);
+            x.WriteAllToLog();
+        }
 
         public void OnClearClicked()
         {
@@ -139,12 +151,6 @@ namespace ShowKSP2Events
             }
 
             _logger.LogInfo($"Cleared all messages.");
-        }
-
-        public void OnExportClicked()
-        {
-            var x = new ExportMessages(Messages.FindAll(m => m.Hits > 0));
-            x.Export();
         }
 
         public void OnPermaStickyClicked(Type messageType)

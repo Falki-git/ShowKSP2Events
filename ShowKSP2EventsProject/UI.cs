@@ -36,7 +36,7 @@ namespace ShowKSP2Events
                 GUIUtility.GetControlID(FocusType.Passive),
                 _windowRect,
                 FillMessageListener,
-                "// ShowKSP2Events",
+                "  // ShowKSP2Events",
                 GUILayout.Height(0)
                 );
 
@@ -68,6 +68,12 @@ namespace ShowKSP2Events
                 MessageListener.Instance.OnExportClicked();
                 PrintStatusBarMessage("Exported all messages to plugin folder.");
             }
+            if (GUILayout.Button("LogAll", Styles.LogAllButton))
+            {
+                MessageListener.Instance.OnWriteAllToLogClicked();
+                PrintStatusBarMessage("All messages types written to log.");
+            }
+
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Clear"))
             {
@@ -92,7 +98,7 @@ namespace ShowKSP2Events
                     }
                     GUILayout.Space(5);
 
-                    if (GUILayout.Button("LOG", message.IsLogging ? Styles.LogButtonEnabled : Styles.LogButtonDisabled))
+                    if (GUILayout.Button("LOG", message.IsLogging ? Styles.LogButtonEnabledButton : Styles.LogButtonDisabledButton))
                     {
                         //message.IsLogging = !message.IsLogging;
                         //_logger.LogInfo($"Toggled logging for {message.TypeName}.");

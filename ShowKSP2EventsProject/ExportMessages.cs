@@ -37,5 +37,13 @@ namespace ShowKSP2Events
                 _logger.LogError("Error trying to export data. Error description: " + ex);
             }
         }
+
+        public void WriteAllToLog()
+        {
+            _logger.LogInfo($"Writing all {Messages.Count} messages to log...");
+
+            foreach (var message in Messages)
+                _logger.LogInfo($"{message.TypeName}");
+        }
     }
 }

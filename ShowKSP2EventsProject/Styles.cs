@@ -16,8 +16,9 @@ namespace ShowKSP2Events
         public static GUIStyle ExportButton;
         public static GUIStyle SettingsButton;
         public static GUIStyle IgnoreButton;
-        public static GUIStyle LogButtonDisabled;
-        public static GUIStyle LogButtonEnabled;
+        public static GUIStyle LogButtonDisabledButton;
+        public static GUIStyle LogButtonEnabledButton;
+        public static GUIStyle LogAllButton;
         public static GUIStyle MessageLabel;
         public static Color NormalTextColor = Color.grey;
         public static Color StickyTextColor = Color.yellow;
@@ -87,17 +88,25 @@ namespace ShowKSP2Events
             };
             IgnoreButton.normal.background = null;
 
-            LogButtonDisabled = new GUIStyle(SpaceWarpUISkin.button)
+            LogButtonDisabledButton = new GUIStyle(SpaceWarpUISkin.button)
             {
                 fixedHeight = 15,
                 fixedWidth = 20,
                 padding = new RectOffset(-2, -2, -2, -2)
             };
-            LogButtonDisabled.normal.background = null;
-            LogButtonDisabled.normal.textColor = new Color32(80, 80, 80, 255); // Dark gray
+            LogButtonDisabledButton.normal.background = null;
+            LogButtonDisabledButton.normal.textColor = new Color32(80, 80, 80, 255); // Dark gray
 
-            LogButtonEnabled = new GUIStyle(LogButtonDisabled);
-            LogButtonEnabled.normal.textColor = Color.white;
+            LogButtonEnabledButton = new GUIStyle(LogButtonDisabledButton);
+            LogButtonEnabledButton.normal.textColor = Color.white;
+
+            LogAllButton = new GUIStyle(SpaceWarpUISkin.button)
+            {
+                fixedHeight = 20,
+                fixedWidth = 50,
+                padding = new RectOffset(-2, -2, -2, -2)
+            };
+            LogAllButton.normal.background = null;
 
             MessageLabel = new GUIStyle(SpaceWarpUISkin.label);
             MessageLabel.normal.textColor = Color.green;
