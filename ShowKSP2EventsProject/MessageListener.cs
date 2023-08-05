@@ -126,16 +126,7 @@ namespace ShowKSP2Events
                     message.IsStale = true;
                 }
             }
-        }
-
-        public void OnPermaStickyClicked(Type messageType)
-        {
-            var message = Messages.Find(m => m.Type == messageType);
-            message.IsPermaSticky = !message.IsPermaSticky;
-            MoveToBelowLastPermaSticky(message);            
-            Settings.Save();
-            _logger.LogInfo($"Toggled pinning for {message.TypeName}.");
-        }
+        }        
 
         public void OnClearClicked()
         {
@@ -146,12 +137,44 @@ namespace ShowKSP2Events
                 message.IsSticky = false;
                 message.IsStale = true;
             }
+
+            _logger.LogInfo($"Cleared all messages.");
         }
 
         public void OnExportClicked()
         {
             var x = new ExportMessages(Messages.FindAll(m => m.Hits > 0));
             x.Export();
+        }
+
+        public void OnPermaStickyClicked(Type messageType)
+        {
+            var message = Messages.Find(m => m.Type == messageType);
+            message.IsPermaSticky = !message.IsPermaSticky;
+            MoveToBelowLastPermaSticky(message);
+            Settings.Save();
+            _logger.LogInfo($"Toggled pinning for {message.TypeName}.");
+        }
+
+        public void OnIgnoredClicked(MessageInfo message)
+        {
+            message.IsIgnored = true;
+            _logger.LogInfo($"Message {message.TypeName} ignored.");
+            Settings.Save();
+        }
+
+        public void OnLoggingClicked(MessageInfo message)
+        {
+            message.IsLogging = !message.IsLogging;
+            _logger.LogInfo($"Toggled logging for {message.TypeName}.");
+            Settings.Save();
+        }
+
+        public void OnUnignoreMessageClicked(MessageInfo message)
+        {
+            message.IsIgnored = false;
+            _logger.LogInfo($"Message {message.TypeName} returned to active messages.");
+            Settings.Save();
         }
     }    
 }

@@ -7,7 +7,6 @@ namespace ShowKSP2Events
     internal class UI
     {
         private static UI _instance;
-        private static ManualLogSource _logger = BepInEx.Logging.Logger.CreateLogSource("ShowKSP2Events.UI");
         private Rect _windowRect = new Rect(650, 140, 500, 100);
         private Rect _settingsRect;
         private string _statusBarMessage;
@@ -72,8 +71,7 @@ namespace ShowKSP2Events
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Clear"))
             {
-                MessageListener.Instance.OnClearClicked();
-                _logger.LogInfo($"Cleared all messages.");
+                MessageListener.Instance.OnClearClicked();                
                 PrintStatusBarMessage("Cleared all messages.");
             }
             GUILayout.EndHorizontal();
@@ -86,17 +84,20 @@ namespace ShowKSP2Events
                     GUILayout.BeginHorizontal();
                     if (GUILayout.Button(Textures.Cross, Styles.IgnoreButton))
                     {
-                        message.IsIgnored = true;
-                        _logger.LogInfo($"Message {message.TypeName} ignored.");
-                        Settings.Save();
+                        //message.IsIgnored = true;
+                        //_logger.LogInfo($"Message {message.TypeName} ignored.");
+                        //Settings.Save();
+
+                        MessageListener.Instance.OnIgnoredClicked(message);
                     }
                     GUILayout.Space(5);
 
                     if (GUILayout.Button("LOG", message.IsLogging ? Styles.LogButtonEnabled : Styles.LogButtonDisabled))
                     {
-                        message.IsLogging = !message.IsLogging;
-                        _logger.LogInfo($"Toggled logging for {message.TypeName}.");
-                        Settings.Save();
+                        //message.IsLogging = !message.IsLogging;
+                        //_logger.LogInfo($"Toggled logging for {message.TypeName}.");
+                        //Settings.Save();
+                        MessageListener.Instance.OnLoggingClicked(message);                    
                     }
                     GUILayout.Space(5);
 
@@ -136,8 +137,6 @@ namespace ShowKSP2Events
             GUI.DragWindow(new Rect(0, 0, Screen.width, Screen.height));
         }
 
-        bool _logTest = false;
-
         private void FillSettings(int windowID)
         {
             GUILayout.Label($"JustHit (white) duration: {_justHitTemp} sec");
@@ -175,11 +174,7 @@ namespace ShowKSP2Events
                 {
                     GUILayout.BeginHorizontal();
                     if (GUILayout.Button(Textures.Plus, Styles.IgnoreButton))
-                    {
-                        message.IsIgnored = false;
-                        _logger.LogInfo($"Message {message.TypeName} returned to active messages.");
-                        Settings.Save();
-                    }
+                        MessageListener.Instance.OnUnignoreMessageClicked(message);
                     GUILayout.Label(message.TypeName, Styles.LabelBase);
                     GUILayout.EndHorizontal();
                     GUILayout.Space(Styles.SpacingAfterEntry);
