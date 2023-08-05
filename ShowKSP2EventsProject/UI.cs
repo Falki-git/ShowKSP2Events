@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using BepInEx.Logging;
+using UnityEngine;
 
 namespace ShowKSP2Events
 {
     internal class UI
     {
         private static UI _instance;
+        private static ManualLogSource _logger = BepInEx.Logging.Logger.CreateLogSource("ShowKSP2Events.UI");
         private Rect _windowRect = new Rect(650, 140, 500, 100);
         private Rect _settingsRect;
 
@@ -63,39 +65,57 @@ namespace ShowKSP2Events
                 MessageListener.Instance.OnExportClicked();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Clear"))
+            {
                 MessageListener.Instance.OnClearClicked();
+                _logger.LogInfo($"Cleared all messages.");
+            }
             GUILayout.EndHorizontal();
 
-            // Draw each message
-            foreach (var message in MessageListener.Instance.Messages.Where(m => !m.IsIgnored && m.Hits > 0 && !m.IsStale))
+            try
             {
-                GUILayout.BeginHorizontal();
-                if (GUILayout.Button(Textures.Cross, Styles.IgnoreButton))
+                // Draw each message
+                foreach (var message in MessageListener.Instance.Messages.Where(m => !m.IsIgnored && m.Hits > 0 && !m.IsStale))
                 {
-                    message.IsIgnored = true;
-                    Settings.Save();
+                    GUILayout.BeginHorizontal();
+                    if (GUILayout.Button(Textures.Cross, Styles.IgnoreButton))
+                    {
+                        message.IsIgnored = true;
+                        _logger.LogInfo($"Message {message.TypeName} ignored.");
+                        Settings.Save();
+                    }
+                    GUILayout.Space(5);
+
+                    if (GUILayout.Button("LOG", message.IsLogging ? Styles.LogButtonEnabled : Styles.LogButtonDisabled))
+                    {
+                        message.IsLogging = !message.IsLogging;
+                        _logger.LogInfo($"Toggled logging for {message.TypeName}.");
+                    }
+                    GUILayout.Space(5);
+
+                    if (GUILayout.Button(message.IsPermaSticky ? Textures.PermaStickyActive : Textures.PermaStickyInactive, Styles.PermaSticky))
+                    {
+                        MessageListener.Instance.OnPermaStickyClicked(message.Type);
+                        _logger.LogInfo($"Toggled pinning for {message.TypeName}.");
+                    }
+                    GUILayout.Space(5);
+
+                    if (message.JustHit)
+                        GUILayout.Label($"{message.Type.Name}: ", Styles.MessageJustHitColor);
+                    else if (message.IsSticky)
+                        GUILayout.Label($"{message.Type.Name}: ", Styles.MessageStickyColor);
+                    else
+                        GUILayout.Label($"{message.Type.Name}: ", Styles.MessageNormalColor);
+
+                    GUILayout.FlexibleSpace();
+                    GUILayout.Label(message.Hits.ToString(), Styles.Hits);
+                    GUILayout.EndHorizontal();
+                    GUILayout.Space(Styles.SpacingAfterEntry);
                 }
-                GUILayout.Space(5);
-                
-                if (GUILayout.Button("LOG", message.IsLogging ? Styles.LogButtonEnabled : Styles.LogButtonDisabled))
-                    message.IsLogging = !message.IsLogging;
-                GUILayout.Space(5);
-
-                if (GUILayout.Button(message.IsPermaSticky ? Textures.PermaStickyActive : Textures.PermaStickyInactive, Styles.PermaSticky))
-                    MessageListener.Instance.OnPermaStickyClicked(message.Type);
-                GUILayout.Space(5);
-
-                if (message.JustHit)
-                    GUILayout.Label($"{message.Type.Name}: ", Styles.MessageJustHitColor);
-                else if (message.IsSticky)
-                    GUILayout.Label($"{message.Type.Name}: ", Styles.MessageStickyColor);
-                else
-                    GUILayout.Label($"{message.Type.Name}: ", Styles.MessageNormalColor);
-
-                GUILayout.FlexibleSpace();
-                GUILayout.Label(message.Hits.ToString(), Styles.Hits);
-                GUILayout.EndHorizontal();
-                GUILayout.Space(Styles.SpacingAfterEntry);
+            }
+            catch (InvalidOperationException ex) when (ex.Message.Contains("Collection was modified"))
+            {
+                // Sometimes drawing will fail because an event is in the process of modifying the MessageListener.Messages list
+                // or we're shuffling the list of messages
             }
 
             GUI.DragWindow(new Rect(0, 0, Screen.width, Screen.height));
@@ -141,6 +161,7 @@ namespace ShowKSP2Events
                     if (GUILayout.Button(Textures.Plus, Styles.IgnoreButton))
                     {
                         message.IsIgnored = false;
+                        _logger.LogInfo($"Message {message.TypeName} returned to active messages.");
                         Settings.Save();
                     }
                     GUILayout.Label(message.TypeName, Styles.LabelBase);

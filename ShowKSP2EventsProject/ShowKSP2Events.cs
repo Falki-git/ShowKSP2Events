@@ -73,6 +73,7 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
         catch (InvalidOperationException ex) when (ex.Message.Contains("Collection was modified"))
         {
             // Sometimes update will fail because an event is in the process of modifying the MessageListener.Messages list
+            // or we're shuffling the list of messages
         }
         catch (Exception ex)
         {
