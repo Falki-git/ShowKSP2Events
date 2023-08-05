@@ -29,7 +29,6 @@ namespace ShowKSP2Events
                 while (File.Exists(_path))
                     _fileNumber++;
 
-                var data = new SettingsData();
                 File.WriteAllText(_path, JsonConvert.SerializeObject(this));
                 _logger.LogInfo("Export successful.");
             }
