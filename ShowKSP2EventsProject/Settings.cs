@@ -9,6 +9,7 @@ namespace ShowKSP2Events
         public static float JustHit = 1.0f;
         public static float StickyDuration = 20.0f;
         public static float DurationTillPruned = 60.0f;
+        public static bool LogAll;
 
         private static ManualLogSource _logger = Logger.CreateLogSource("ShowKSP2Events.Settings");
 
@@ -81,6 +82,8 @@ namespace ShowKSP2Events
         [JsonProperty]
         internal float JustHit;
         [JsonProperty]
+        internal bool LogAll;
+        [JsonProperty]
         internal List<SettingsMessageData> SavedMessages;
 
         internal SettingsData()
@@ -88,6 +91,7 @@ namespace ShowKSP2Events
             StickyDuration = Settings.StickyDuration;
             DurationTillPruned = Settings.DurationTillPruned;
             JustHit = Settings.JustHit;
+            LogAll = Settings.LogAll;
 
             var savedMessages = MessageListener.Instance.Messages
                 .Where(m => m.IsIgnored || m.IsLogging || m.IsPermaSticky);

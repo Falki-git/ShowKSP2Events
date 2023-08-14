@@ -13,7 +13,7 @@ namespace ShowKSP2Events
         public static GUIStyle MessageJustHitColor;
         public static GUIStyle Hits;
         public static GUIStyle PermaSticky;
-        public static GUIStyle ExportButton;
+        public static GUIStyle SaveButton;
         public static GUIStyle SettingsButton;
         public static GUIStyle IgnoreButton;
         public static GUIStyle LogButtonDisabledButton;
@@ -73,7 +73,7 @@ namespace ShowKSP2Events
                 padding = new RectOffset(-2, -2, -2, -2)
             };
 
-            ExportButton = new GUIStyle(SpaceWarpUISkin.button)
+            SaveButton = new GUIStyle(SpaceWarpUISkin.button)
             {
                 fixedHeight = 20,
                 fixedWidth = 20,

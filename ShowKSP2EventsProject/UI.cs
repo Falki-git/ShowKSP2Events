@@ -61,15 +61,17 @@ namespace ShowKSP2Events
                 _tillPrunedTemp = Settings.DurationTillPruned;
                 _showSettings = !_showSettings;
             }
-            if (GUILayout.Button(Textures.Export, Styles.ExportButton))
+            if (GUILayout.Button(Textures.FloppyDisk, Styles.SaveButton))
             {
-                MessageListener.Instance.OnExportClicked();
-                PrintStatusBarMessage("Exported all messages to plugin folder.");
+                MessageListener.Instance.OnSaveClicked();
+                //PrintStatusBarMessage("Exported all messages to plugin folder.");
+                PrintStatusBarMessage($"All {MessageListener.Instance.Messages.Count} messages that the game uses written to log.");
             }
             if (GUILayout.Button("LogAll", Styles.LogAllButton))
             {
                 MessageListener.Instance.OnWriteAllToLogClicked();
-                PrintStatusBarMessage("All message types written to log.");
+                //PrintStatusBarMessage("All message types written to log.");
+                PrintStatusBarMessage($"Logging for all messages set to: {Settings.LogAll}.");
             }
 
             GUILayout.FlexibleSpace();

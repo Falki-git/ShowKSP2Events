@@ -65,6 +65,12 @@ public class ShowKSP2Events : BaseSpaceWarpPlugin
 
     private void Update()
     {
+        // Keyboard shortcut for opening UI
+        if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.E))
+        {
+            _isWindowOpen = !_isWindowOpen;
+        }
+        
         try
         {
             MessageListener.Instance.CheckStickies();

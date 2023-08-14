@@ -11,7 +11,7 @@ namespace ShowKSP2Events
 
         public static Texture2D PermaStickyActive;
         public static Texture2D PermaStickyInactive;
-        public static Texture2D Export;
+        public static Texture2D FloppyDisk;
         public static Texture2D Settings;
         public static Texture2D Cross;
         public static Texture2D Plus;
@@ -25,7 +25,7 @@ namespace ShowKSP2Events
 
             PermaStickyActive = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/permasticky_active.png");
             PermaStickyInactive = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/permasticky_inactive.png");
-            Export = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/export-30.png");
+            FloppyDisk = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/export-30.png");
             Settings = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/settings-20.png");
             Cross = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/cross.png");
             Plus = LoadTexture($"{_plugin.SpaceWarpMetadata.ModID}/images/plus.png");
