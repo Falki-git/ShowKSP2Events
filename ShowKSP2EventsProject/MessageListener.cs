@@ -41,7 +41,7 @@ namespace ShowKSP2Events
                     var action = (Action<MessageCenterMessage>)Delegate.CreateDelegate(typeof(Action<MessageCenterMessage>), this, method);
 
                     var specificMethod = messageCenterType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                        .Where(m => m.Name == "Subscribe")
+                        .Where(m => m.Name == "PersistentSubscribe")
                         .Select(m => new { Method = m, Parameters = m.GetParameters() })
                         .Where(x => x.Parameters.Length == 1 && x.Parameters[0].ParameterType.IsGenericType)
                         .Where(x => x.Parameters[0].ParameterType.GetGenericTypeDefinition() == typeof(Action<>))
