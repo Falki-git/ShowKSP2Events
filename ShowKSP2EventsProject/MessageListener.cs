@@ -41,7 +41,7 @@ namespace ShowKSP2Events
                     var action = (Action<MessageCenterMessage>)Delegate.CreateDelegate(typeof(Action<MessageCenterMessage>), this, method);
 
                     var specificMethod = messageCenterType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                        .Where(m => m.Name == "Subscribe")
+                        .Where(m => m.Name == "PersistentSubscribe")
                         .Select(m => new { Method = m, Parameters = m.GetParameters() })
                         .Where(x => x.Parameters.Length == 1 && x.Parameters[0].ParameterType.IsGenericType)
                         .Where(x => x.Parameters[0].ParameterType.GetGenericTypeDefinition() == typeof(Action<>))
@@ -76,7 +76,9 @@ namespace ShowKSP2Events
             messageInfo.IsSticky = true;
             messageInfo.IsStale = false;
 
-            if (messageInfo.IsLogging)
+            // Log message if user manually clicked the log button OR if LogAll is set, but user didn't ignore the message
+            if (messageInfo.IsLogging
+                || (Settings.LogAll && !messageInfo.IsIgnored))
                 _logger.LogInfo($"Message {messageInfo.TypeName} triggered at {messageInfo.DateTimeOfLastHit}. Hit number: {messageInfo.Hits}.");
 
             if (!messageInfo.IsPermaSticky && !messageInfo.IsSticky)
@@ -128,16 +130,25 @@ namespace ShowKSP2Events
             }
         }
 
-        public void OnExportClicked()
+        public void OnSaveClicked()
         {
+            /*
             var x = new ExportMessages(Messages.FindAll(m => m.Hits > 0));
             x.Export();
+            */
+
+            var x = new ExportMessages(Messages);
+            x.WriteAllToLog();
         }
 
         public void OnWriteAllToLogClicked()
         {
+            /*
             var x = new ExportMessages(Messages);
             x.WriteAllToLog();
+            */
+            Settings.LogAll = !Settings.LogAll;
+            Settings.Save();
         }
 
         public void OnClearClicked()
