@@ -24,7 +24,7 @@ Mod folder will be placed in ..\Kerbal Space Program 2\BepInEx\plugins\
 // Place somewhere inside of: public override void OnInitialized()
 
 var messages = GameManager.Instance.Game.Messages;
-messages.Subscribe<NameOfTheEventYouWantToSubscribeTo>(new Action<MessageCenterMessage>(this.YourMethodThatWillHandleTheEvent));
+messages.PersistentSubscribe<NameOfTheEventYouWantToSubscribeTo>(new Action<MessageCenterMessage>(this.YourMethodThatWillHandleTheEvent));
 
 private void YourMethodThatWillHandleTheEvent(MessageCenterMessage obj)
 {
