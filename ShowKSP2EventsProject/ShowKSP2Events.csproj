@@ -8,7 +8,7 @@
         <AssemblyName>com.github.falki.showksp2events</AssemblyName>
         <Product>ShowKSP2Events</Product>
         <Description>Shows KSP2 events being triggered</Description>
-        <Version>1.3.0</Version>
+        <Version>1.4.0</Version>
         <RestoreAdditionalProjectSources>
             https://api.nuget.org/v3/index.json;
             https://nuget.bepinex.dev/v3/index.json
