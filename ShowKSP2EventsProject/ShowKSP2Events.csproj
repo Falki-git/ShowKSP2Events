@@ -1,36 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>true</ImplicitUsings>
         <AssemblyName>com.github.falki.showksp2events</AssemblyName>
         <Product>ShowKSP2Events</Product>
         <Description>Shows KSP2 events being triggered</Description>
-        <Version>1.4.0</Version>
-        <RestoreAdditionalProjectSources>
-            https://api.nuget.org/v3/index.json;
-            https://nuget.bepinex.dev/v3/index.json
-        </RestoreAdditionalProjectSources>
+        <Version>1.4.1</Version>
         <RootNamespace>ShowKSP2Events</RootNamespace>
         <ModId Condition="'$(ModId)'==''">ShowKSP2Events</ModId>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="Assembly-CSharp">
-            <HintPath>..\external_dlls\Assembly-CSharp.dll</HintPath>
-            <Publicize>true</Publicize>
-            <Private>false</Private>
-        </Reference>
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
-        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0" PrivateAssets="all" />
-        <PackageReference Include="BepInEx.Core" Version="5.*" />
-        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-        <PackageReference Include="HarmonyX" Version="2.10.1" />
-        <PackageReference Include="SpaceWarp" Version="1.4.0" />
-        <PackageReference Include="UnityEngine.Modules" Version="2020.3.33.1" IncludeAssets="compile" />
+		<PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+		<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" />
+		<PackageReference Include="BepInEx.Core" Version="5.*" />
+		<PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+		<PackageReference Include="HarmonyX" Version="2.10.1" />
+		<PackageReference Include="KerbalSpaceProgram2.GameLibs" Version="0.1.5" PrivateAssets="all" />
+		<PackageReference Include="SpaceWarp" Version="1.5.2" />
+		<PackageReference Include="UnityEngine.Modules" Version="2022.3.5" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
         <Exec Command="echo d | xcopy /y /s &quot;$(ProjectDir)..\$(ModId)\&quot; &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\&quot;&#xA;echo f | xcopy /y &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\$(ModId).dll&quot;&#xA;if $(ConfigurationName) == Debug echo f | xcopy /y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\$(ModId).pdb&quot;&#xA;xcopy /y &quot;$(ProjectDir)..\LICENSE&quot; &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\&quot;&#xA;echo f | xcopy /y &quot;$(ProjectDir)..\README.md&quot; &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\README.txt&quot;&#xD;&#xA;&#xD;&#xA;echo Copying output .dll to &quot;$(KSP2DIR)\BepInEx\plugins\ShowKSP2Events\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\$(ModId).dll&quot; &quot;$(KSP2DIR)\BepInEx\plugins\ShowKSP2Events\&quot;&#xD;&#xA;&#xD;&#xA;echo Copying output .pdb to &quot;$(KSP2DIR)\BepInEx\plugins\ShowKSP2Events\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\$(ModId).pdb&quot; &quot;$(KSP2DIR)\BepInEx\plugins\ShowKSP2Events\&quot;&#xD;&#xA;&#xD;&#xA;echo Starting KSP2_x64.exe&#xD;&#xA;powershell &quot;start-process &quot;&quot;$(KSP2DIR)\KSP2_x64.exe&quot;&quot;&quot;" />
